@@ -1,10 +1,4 @@
-# Stack's standard Travis config, taken from
-# http://docs.haskellstack.org/en/stable/GUIDE.html#travis-with-caching
-
-# Use new container infrastructure to enable caching
 sudo: false
-
-# Choose a lightweight base image; we provide our own build tools.
 language: c
 
 # GHC depends on GMP. You can add other dependencies here as well.
@@ -13,43 +7,27 @@ addons:
         packages:
             - libgmp-dev
 
-# The different configurations we want to test. You could also do things like
-# change flags or use --stack-yaml to point to a different file.
 env:
-    - ARGS=""
-    - ARGS="--resolver lts-3 --stack-yaml stack-lts3.yaml"
-    - ARGS="--resolver lts-4"
-    - ARGS="--resolver lts-5"
-    - ARGS="--resolver lts-6"
-    - ARGS="--resolver lts"
-    - ARGS="--resolver nightly"
-    # - ARGS="--resolver nightly"
+    - ARGS="stack"
+    - ARGS="stack --resolver lts-3 --stack-yaml stack-lts3.yaml"
+    - ARGS="stack --resolver lts-4"
+    - ARGS="stack --resolver lts-5"
+    - ARGS="stack --resolver lts-6"
+    - ARGS="stack --resolver lts"
+    - ARGS="stack --resolver nightly"
 
 matrix:
     fast_finish: true
     allow_failures:
-        - env: ARGS="--resolver nightly"
+        - env: ARGS="stack --resolver nightly"
 
 
 before_install:
-    # Download and unpack the stack executable
-    - mkdir -p ~/.local/bin
-    - export PATH=$HOME/.local/bin:$PATH
-    - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-
-    - stack $ARGS --no-terminal setup
-    - stack $ARGS --no-terminal install hlint hscolour cabal-install
+    - ./ci/before_install $ARGS
 
 script:
-    - travis_wait stack $ARGS --no-terminal test --coverage --ghc-options -Werror
-    - travis_wait stack $ARGS --no-terminal test --flag stgi:doctest --ghc-options -Werror
-    - stack $ARGS --no-terminal haddock --no-haddock-deps
+    - ./ci/script $ARGS
 
-    - stack $ARGS --no-terminal sdist
-    - cabal check
-    - hlint src test app
-
-# Caching so the next build will be fast too.
 cache:
     directories:
         - $HOME/.stack
