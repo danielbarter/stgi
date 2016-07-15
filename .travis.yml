@@ -23,10 +23,10 @@ matrix:
 
 
 before_install:
-    - ./ci/before_install $ARGS
+    - travis_retry ./ci/before_install $ARGS
 
 script:
-    - ./ci/script $ARGS
+    - travis_wait ./ci/script $ARGS
 
 cache:
     directories:
