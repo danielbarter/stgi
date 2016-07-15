@@ -11,10 +11,10 @@ case "${ARGS[0]}" in
         ARGS="${ARGS:1}"
 
         # Download and unpack the stack executable
-        mkdir -p "~/.local/bin"
+        mkdir -vp "~/.local/bin"
         export PATH="$HOME/.local/bin:$PATH"
         curl -L https://www.stackage.org/stack/linux-x86_64 \
-            | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+            | tar xz --wildcards --strip-components=1 -C "~/.local/bin" '*/stack'
 
         stack --version
         stack $ARGS --no-terminal setup
