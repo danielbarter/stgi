@@ -8,7 +8,7 @@ case "${ARGS[0]}" in
 
     "stack")
 
-        ARGS="${ARGS:1}"
+        ARGS="${ARGS[@]:1}"
 
         # Download and unpack the stack executable
         mkdir -vp "$HOME/.local/bin"

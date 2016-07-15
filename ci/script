@@ -8,7 +8,7 @@ case "${ARGS[0]}" in
 
     "stack")
 
-        ARGS="${ARGS:1}"
+        ARGS="${ARGS[@]:1}"
 
         stack $ARGS --no-terminal test --coverage --ghc-options -Werror
         stack $ARGS --no-terminal test --flag stgi:doctest --ghc-options -Werror
