@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-$ARGS="$@"
+ARGS="$@"
 
 case "${ARGS[0]}" in
 
