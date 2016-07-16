@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -evuo pipefail
+set -evxuo pipefail
 
 ARGS="$@"
 
