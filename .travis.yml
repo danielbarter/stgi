@@ -41,9 +41,9 @@ before_install:
     - stack $STACK_ARGS --no-terminal install hlint hscolour cabal-install
 
 script:
-    - travis_wait stack $STACK_ARGS $STACK_BUILD_ARGS --no-terminal test --coverage
-    - travis_wait stack $STACK_ARGS $STACK_BUILD_ARGS --no-terminal test --flag stgi:doctest
-    - travis_wait stack $STACK_ARGS $STACK_BUILD_ARGS --no-terminal haddock --no-haddock-deps
+    - travis_wait stack $STACK_ARGS --no-terminal test --coverage           $STACK_BUILD_ARGS
+    - travis_wait stack $STACK_ARGS --no-terminal test --flag stgi:doctest  $STACK_BUILD_ARGS
+    - travis_wait stack $STACK_ARGS --no-terminal haddock --no-haddock-deps $STACK_BUILD_ARGS
 
     - stack $STACK_ARGS --no-terminal sdist
     - cabal check
