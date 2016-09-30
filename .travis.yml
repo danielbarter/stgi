@@ -16,19 +16,19 @@ addons:
 # The different configurations we want to test. You could also do things like
 # change flags or use --stack-yaml to point to a different file.
 env:
-    - STACK_ARGS=""                                              GHC_ARGS=""
-    - STACK_ARGS="--resolver lts-3 --stack-yaml stack-lts3.yaml" GHC_ARGS=""
-    - STACK_ARGS="--resolver lts-4"                              GHC_ARGS=""
-    - STACK_ARGS="--resolver lts-5"                              GHC_ARGS=""
-    - STACK_ARGS="--resolver lts-6"                              GHC_ARGS=""
-    - STACK_ARGS="--resolver lts-7"                              GHC_ARGS="-Werror"
-    - STACK_ARGS="--resolver lts"                                GHC_ARGS=""
-    - STACK_ARGS="--resolver nightly"                            GHC_ARGS=""
+    - STACK_ARGS=""                                              STACK_BUILD_ARGS=""
+    - STACK_ARGS="--resolver lts-3 --stack-yaml stack-lts3.yaml" STACK_BUILD_ARGS=""
+    - STACK_ARGS="--resolver lts-4"                              STACK_BUILD_ARGS=""
+    - STACK_ARGS="--resolver lts-5"                              STACK_BUILD_ARGS=""
+    - STACK_ARGS="--resolver lts-6"                              STACK_BUILD_ARGS=""
+    - STACK_ARGS="--resolver lts-7"                              STACK_BUILD_ARGS="--ghc-options -Werror"
+    - STACK_ARGS="--resolver lts"                                STACK_BUILD_ARGS=""
+    - STACK_ARGS="--resolver nightly"                            STACK_BUILD_ARGS=""
 
 matrix:
     fast_finish: true
     allow_failures:
-        - env: STACK_ARGS="--resolver nightly"
+        - env: STACK_ARGS="--resolver nightly"                            STACK_BUILD_ARGS=""
 
 
 before_install:
@@ -41,9 +41,9 @@ before_install:
     - stack $STACK_ARGS --no-terminal install hlint hscolour cabal-install
 
 script:
-    - travis_wait stack $STACK_ARGS --no-terminal test --coverage --ghc-options $GHC_ARGS
-    - travis_wait stack $STACK_ARGS --no-terminal test --flag stgi:doctest --ghc-options $GHC_ARGS
-    - stack $STACK_ARGS --no-terminal haddock --no-haddock-deps
+    - travis_wait stack $STACK_ARGS $STACK_BUILD_ARGS --no-terminal test --coverage
+    - travis_wait stack $STACK_ARGS $STACK_BUILD_ARGS --no-terminal test --flag stgi:doctest
+    - travis_wait stack $STACK_ARGS $STACK_BUILD_ARGS --no-terminal haddock --no-haddock-deps
 
     - stack $STACK_ARGS --no-terminal sdist
     - cabal check
